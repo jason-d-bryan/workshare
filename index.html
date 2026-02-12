@@ -26,9 +26,10 @@
   .topbar { background: linear-gradient(135deg, #1e3a5f, #0f172a); border-bottom: 2px solid var(--accent); padding: 18px 32px; position: sticky; top: 0; z-index: 100; }
   .topbar h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; }
   .topbar .subtitle { color: var(--text2); font-size: 0.85rem; margin-top: 2px; }
+  .topbar .meeting-banner { background: rgba(239,68,68,0.15); border: 1px solid var(--red); border-radius: 8px; padding: 8px 14px; margin-top: 10px; font-size: 0.9rem; color: var(--red); font-weight: 600; }
 
   /* Nav Tabs */
-  .nav { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 80px; z-index: 99; overflow-x: auto; }
+  .nav { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 110px; z-index: 99; overflow-x: auto; }
   .nav button { background: none; border: none; color: var(--text2); padding: 14px 22px; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; font-family: inherit; }
   .nav button:hover { color: var(--text); background: var(--surface2); }
   .nav button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
@@ -68,7 +69,7 @@
   .tl-title { font-weight: 600; margin: 2px 0; }
   .tl-desc { font-size: 0.85rem; color: var(--text2); }
 
-  /* Pitfalls */
+  /* Pitfalls / Expandable items */
   .pitfall { background: var(--surface); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 12px; cursor: pointer; }
   .pitfall .pf-head { display: flex; justify-content: space-between; align-items: center; }
   .pitfall .pf-title { font-weight: 600; }
@@ -96,6 +97,22 @@
   .bridge-card .arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text2); }
   .bridge-card.open .arrow { transform: rotate(90deg); }
 
+  /* Email thread items */
+  .email-thread { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; cursor: pointer; }
+  .email-thread .et-header { display: flex; justify-content: space-between; align-items: center; }
+  .email-thread .et-name { font-weight: 700; font-size: 1.0rem; }
+  .email-thread .et-detail { display: none; margin-top: 14px; font-size: 0.9rem; color: var(--text2); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 14px; }
+  .email-thread.open .et-detail { display: block; }
+  .email-thread .arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text2); }
+  .email-thread.open .arrow { transform: rotate(90deg); }
+  .email-msg { border-left: 3px solid var(--border); padding: 10px 14px; margin: 10px 0; background: rgba(0,0,0,0.15); border-radius: 0 6px 6px 0; }
+  .email-msg .em-from { font-weight: 600; font-size: 0.85rem; color: var(--accent); }
+  .email-msg .em-date { font-size: 0.78rem; color: var(--text2); }
+  .email-msg .em-body { margin-top: 4px; }
+  .email-msg.wvdoh { border-left-color: var(--orange); }
+  .email-msg.wvdoh .em-from { color: var(--orange); }
+  .email-msg.markosky { border-left-color: var(--accent); }
+
   /* Fee Table */
   table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.9rem; }
   th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
@@ -111,12 +128,18 @@
   .person-name { font-weight: 600; }
   .person-role { font-size: 0.85rem; color: var(--text2); }
 
+  /* Progress Chart */
+  .progress-chart { display: flex; align-items: flex-end; gap: 6px; height: 140px; margin: 16px 0 20px; padding: 0 4px; }
+  .progress-bar { flex: 1; background: var(--accent); border-radius: 4px 4px 0 0; position: relative; min-width: 40px; transition: height 0.3s; }
+  .progress-bar .pb-label { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: var(--text2); white-space: nowrap; }
+  .progress-bar .pb-value { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; font-weight: 700; color: var(--text); }
+
   /* Bottom Line */
   .bottom-line { background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1)); border: 1px solid var(--accent); border-radius: 12px; padding: 24px; margin-top: 20px; }
   .bottom-line h3 { color: var(--accent); margin: 0 0 12px; font-size: 1.1rem; }
   .bottom-line ul { list-style: none; padding: 0; }
   .bottom-line li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 0.95rem; }
-  .bottom-line li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+  .bottom-line li::before { content: '\2192'; position: absolute; left: 0; color: var(--accent); }
 
   /* Schedule Comparison */
   .sched-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; margin-bottom: 1px; font-size: 0.9rem; }
@@ -133,10 +156,6 @@
     .sched-row { grid-template-columns: 1fr; }
   }
 
-  /* Quick-reference tooltip */
-  .tip { position: relative; border-bottom: 1px dotted var(--text2); cursor: help; }
-  .tip:hover::after { content: attr(data-tip); position: absolute; bottom: 100%; left: 0; background: var(--surface2); color: var(--text); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; white-space: nowrap; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-
   /* Print */
   @media print {
     .nav, .topbar { position: static; }
@@ -149,13 +168,16 @@
 
 <div class="topbar">
   <h1>US 250 Interchange Bridges — Project Briefing</h1>
-  <div class="subtitle">State Project S335-250-12.80 &nbsp;|&nbsp; Federal Project NHPP-0250(281)D &nbsp;|&nbsp; Wheeling, WV (Ohio County) &nbsp;|&nbsp; As of Feb 9, 2026</div>
+  <div class="subtitle">State Project S335-250-12.80 &nbsp;|&nbsp; Federal Project NHPP-0250(281)D &nbsp;|&nbsp; Wheeling, WV (Ohio County)</div>
+  <div class="meeting-banner">MEETING TODAY — Feb 12, 2026 @ 1:30 PM via Google Meet &nbsp;|&nbsp; Called by Jason Bryan (WVDOH) &nbsp;|&nbsp; Markosky bringing mainline bridge plan PDF to show progress</div>
 </div>
 
 <div class="nav" id="nav">
   <button class="active" data-tab="dashboard">Dashboard</button>
   <button data-tab="timeline">Timeline</button>
+  <button data-tab="progress">Progress Trend</button>
   <button data-tab="bridges">Bridges</button>
+  <button data-tab="emails">Email Intel</button>
   <button data-tab="pitfalls">Pitfalls & Risks</button>
   <button data-tab="unclear">Unclear Items</button>
   <button data-tab="positives">What's Going Well</button>
@@ -171,7 +193,7 @@
     <div class="card">
       <div class="card-label" style="color:var(--accent)">Completion</div>
       <div class="card-value">36%</div>
-      <div class="card-note">As of Feb 9, 2026 progress report</div>
+      <div class="card-note">As of Feb 9, 2026 — trend: 19% > 23% > 25% > 33% > 36%</div>
     </div>
     <div class="card">
       <div class="card-label" style="color:var(--green)">Approved Fee</div>
@@ -194,14 +216,14 @@
       <div class="card-note">PMD1 NTP: Nov 10, 2025</div>
     </div>
     <div class="card">
-      <div class="card-label" style="color:var(--accent2)">Consultant</div>
-      <div class="card-value" style="font-size:1.15rem">Markosky Engineering</div>
-      <div class="card-note">Cost-Plus Fixed Fee contract</div>
+      <div class="card-label" style="color:var(--accent2)">PMD2 Status</div>
+      <div class="card-value" style="font-size:1.1rem; color:var(--yellow)">Tech & Zero Price Submitted</div>
+      <div class="card-note">Sent to Jason Bryan on Feb 9, 2026 — awaiting WVDOH review</div>
     </div>
     <div class="card">
-      <div class="card-label" style="color:var(--red)">PMD1 Fee</div>
-      <div class="card-value" style="color:var(--red)">$0 (Zeroed)</div>
-      <div class="card-note">Fee proposal for 6th bridge work shows all zeros — not yet approved</div>
+      <div class="card-label" style="color:var(--red)">Netting Removal</div>
+      <div class="card-value" style="font-size:1.1rem; color:var(--red)">Sub Obtained</div>
+      <div class="card-note">Sofis Co. quoted Jan 26 — $3,250/day netting + $2,500/day MOT + $1,450/day flagging</div>
     </div>
     <div class="card">
       <div class="card-label" style="color:var(--yellow)">Utility Coord</div>
@@ -215,11 +237,12 @@
     <ul>
       <li>Project is <strong>behind schedule</strong> — 36% complete after 10 months, 60% plans date is TBD</li>
       <li>The 6th bridge (PMD1) was an <strong>omission correction</strong>, not scope creep — schedule delay was expected and accepted</li>
-      <li><strong>Ramp B deck replacement</strong> is the biggest scope risk — PMD2 not yet prepared</li>
-      <li><strong>PMD1 fee is zeroed out</strong> — Markosky is doing 6th bridge work without an approved fee</li>
-      <li><strong>Netting removal</strong> is blocking survey access needed for design progress</li>
-      <li><strong>Utility coordination hasn't started</strong> — potential late-stage surprises</li>
-      <li>RRM and field work have gone smoothly — "no major concerns beyond originally anticipated scope"</li>
+      <li><strong>PMD2 Tech & Zero Price was just submitted</strong> (Feb 9) — includes Markosky narrative, SP&K survey, and Sofis netting/MOT quote</li>
+      <li><strong>WVDOH directed</strong> Ramp B deck replacement on Nov 5 — "OM concurs... better long-term option for the Division"</li>
+      <li><strong>Netting removal saga:</strong> Asked WVDOH to remove (Nov 25) → District said they can't (Dec 15) → Markosky had to find a sub → Sofis quoted Jan 26</li>
+      <li><strong>Ramp B bearings</strong> — Markosky asked District for direction on scope (Nov 17), still awaiting answer</li>
+      <li>Markosky has been <strong>working on other structure plans + TMP</strong> while waiting on PMD2 blockers</li>
+      <li>Nick Wagner will show <strong>mainline bridge plan PDF</strong> at today's meeting to demonstrate progress</li>
     </ul>
   </div>
 </div>
@@ -234,31 +257,52 @@
       <div>Milestone</div><div>Planned</div><div>Actual</div>
     </div>
     <div class="sched-row">
-      <div>Fee Proposal</div><div>Jan 9, 2025</div><div>Jan 9, 2025 ✓</div>
+      <div>Fee Proposal</div><div>Jan 9, 2025</div><div>Jan 9, 2025 &#10003;</div>
     </div>
     <div class="sched-row">
-      <div>Revised Fee</div><div>—</div><div>Feb 14, 2025</div>
+      <div>Revised Fee</div><div>--</div><div>Feb 14, 2025</div>
     </div>
     <div class="sched-row">
       <div>NTP</div><div>Feb 3, 2025</div><div>Apr 4, 2025 <span class="slip">(+2 mo)</span></div>
     </div>
     <div class="sched-row">
-      <div>Field Inspection</div><div>NTP + 30 days</div><div>May 12, 2025 ✓</div>
+      <div>Field Inspection</div><div>NTP + 30 days</div><div>May 12, 2025 &#10003;</div>
     </div>
     <div class="sched-row">
-      <div>RRM Submitted</div><div>NTP + 60 days</div><div>Jun 4, 2025 ✓</div>
+      <div>RRM Submitted</div><div>NTP + 60 days</div><div>Jun 4, 2025 &#10003;</div>
     </div>
     <div class="sched-row">
-      <div>Revised RRM</div><div>—</div><div>Jun 24, 2025</div>
+      <div>Revised RRM</div><div>--</div><div>Jun 24, 2025</div>
     </div>
     <div class="sched-row">
-      <div>PMD1 (6th Bridge)</div><div>—</div><div>Sep 22, 2025</div>
+      <div>RRM Approved by WVDOH</div><div>--</div><div>Jul 25, 2025 (31 days after submission)</div>
     </div>
     <div class="sched-row">
-      <div>PMD1 NTP</div><div>—</div><div>Nov 10, 2025</div>
+      <div>PMD1 Submitted</div><div>--</div><div>Sep 22, 2025</div>
     </div>
     <div class="sched-row">
-      <div>35A118 Field View</div><div>—</div><div>Dec 11, 2025 ✓</div>
+      <div>PMD1 Fee Approved (Bill Murray)</div><div>--</div><div>Oct 16, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>PMD1 NTP</div><div>--</div><div>Nov 10, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>WVDOH Directs Ramp B Deck Replacement</div><div>--</div><div>Nov 5, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>35A118 Field View</div><div>--</div><div>Dec 11, 2025 &#10003;</div>
+    </div>
+    <div class="sched-row">
+      <div>WVDOH Says Can't Remove Netting</div><div>--</div><div>Dec 15, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>Sofis Netting Quote</div><div>--</div><div>Jan 26, 2026</div>
+    </div>
+    <div class="sched-row">
+      <div>PMD2 Tech & Zero Price Submitted</div><div>--</div><div>Feb 9, 2026</div>
+    </div>
+    <div class="sched-row">
+      <div>Progress Meeting</div><div>--</div><div style="color:var(--yellow); font-weight:600;">TODAY — Feb 12, 2026 @ 1:30 PM</div>
     </div>
     <div class="sched-row">
       <div>60% Submission</div><div>~Oct 2025</div><div class="slip">TBD — not scheduled</div>
@@ -307,18 +351,53 @@
     </div>
     <div class="tl-item done">
       <div class="tl-date">Jun 18, 2025</div>
-      <div class="tl-title">Progress Meeting</div>
+      <div class="tl-title">Progress/Memo Review Meeting</div>
       <div class="tl-desc">Discussion leading to RRM revisions</div>
     </div>
     <div class="tl-item done">
       <div class="tl-date">Jun 24, 2025</div>
-      <div class="tl-title">Revised RRM (Rev 1)</div>
+      <div class="tl-title">Revised RRM (Rev 1) Submitted</div>
       <div class="tl-desc">Added: concrete protective coating for all substructures, Ramp C bearing reset, MPT methods for 60%</div>
     </div>
     <div class="tl-item done">
+      <div class="tl-date">Jul 25, 2025</div>
+      <div class="tl-title">RRM Approved by WVDOH</div>
+      <div class="tl-desc">Jason Bryan: "Everyone is in agreement on our end and approve the RRM." Took 31 days — Jason acknowledged delay on his end.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Jul 28, 2025</div>
+      <div class="tl-title">Nick Wagner Sends Revised Design Schedule</div>
+      <div class="tl-desc">Plan preparation and TMP work begins. "We will be in touch throughout the process."</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Aug 25, 2025</div>
+      <div class="tl-title">WVDOH Proposes Adding Bridge 35A118</div>
+      <div class="tl-desc">Jason Bryan: "Bridge 35a118, 27th Street, that we'd possibly like to roll into this US250 Project as a supplemental." Shares a retaining wall with the project.</div>
+    </div>
+    <div class="tl-item done">
       <div class="tl-date">Sep 22, 2025</div>
-      <div class="tl-title">PMD1 — 6th Bridge Added (35A118)</div>
-      <div class="tl-desc">US 250 SB Con.-Dis., 2-span 254.0' continuous steel multi-girders — correcting an omission from the original project scope (not scope creep). Known schedule impact accepted.</div>
+      <div class="tl-title">PMD1 — 6th Bridge Submitted (35A118)</div>
+      <div class="tl-desc">Correcting an omission from the original project scope (not scope creep). Known schedule impact accepted.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Oct 16, 2025</div>
+      <div class="tl-title">PMD1 Fee Approved by Bill Murray</div>
+      <div class="tl-desc">"This looks reasonable to me. If you both are okay with this then have Grant start working up the supplemental."</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Oct 22, 2025</div>
+      <div class="tl-title">Bill Murray Leaves WVDOH</div>
+      <div class="tl-desc">Jason Bryan: Murray "moved on to greener pastures." Mike Hicks (District 6) replaces him on project.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Oct 27, 2025</div>
+      <div class="tl-title">Ramp B Safety Concern Raised</div>
+      <div class="tl-desc">Jason Bryan: "We recently had some material come loose beyond the installed netting." Pressure from above to address Ramp B.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Nov 5, 2025</div>
+      <div class="tl-title">WVDOH Directs Ramp B Deck Replacement</div>
+      <div class="tl-desc">Jason Bryan: "OM concurs and would like to move forward with a deck replacement in lieu of repairs. We understand the necessity for added cost and time but this is a better long-term option." PMD2 initiated.</div>
     </div>
     <div class="tl-item done">
       <div class="tl-date">Nov 10, 2025</div>
@@ -326,29 +405,59 @@
       <div class="tl-desc">NTP for 6th bridge scope of work</div>
     </div>
     <div class="tl-item done">
+      <div class="tl-date">Nov 17, 2025</div>
+      <div class="tl-title">Ramp B Bearing Question Sent to WVDOH</div>
+      <div class="tl-desc">Nick Wagner asked for direction on rocker bearings — options from full replacement to cleaning/resetting. Still awaiting answer.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Nov 25, 2025</div>
+      <div class="tl-title">Netting Removal Question Sent to WVDOH</div>
+      <div class="tl-desc">Nick asked if WVDOH can pull back netting for survey like they did for Dec 2024 bridge inspection.</div>
+    </div>
+    <div class="tl-item done">
       <div class="tl-date">Dec 11, 2025</div>
       <div class="tl-title">35A118 Field View Completed</div>
       <div class="tl-desc">Field assessment of newly added 6th bridge</div>
     </div>
-    <div class="tl-item current">
+    <div class="tl-item done">
+      <div class="tl-date">Dec 15, 2025</div>
+      <div class="tl-title">WVDOH: District Cannot Remove Netting</div>
+      <div class="tl-desc">Kim Hoover: "The District does not have the ability at this time to assist with this work. Please obtain a Subcontractor."</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Dec 22, 2025</div>
+      <div class="tl-title">Pigeon Droppings Flagged as Netting Issue</div>
+      <div class="tl-desc">Mike Hicks: "One thing that I know is an issue is that there will be a bunch of pigeon droppings to contend with." Nick: "We don't have any experience with this."</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Jan 26, 2026</div>
+      <div class="tl-title">Sofis Netting/MOT Quote Received</div>
+      <div class="tl-desc">Sofis Company quoted $3,250/day netting work + $2,500/day MOT + $1,450/day flagging + $1,150 LS hardware</div>
+    </div>
+    <div class="tl-item done">
       <div class="tl-date">Feb 9, 2026</div>
-      <div class="tl-title">Progress Report — 36% Complete</div>
-      <div class="tl-desc">PMD2 being assembled for Ramp B. Netting removal blocking survey. Utility coord not started.</div>
+      <div class="tl-title">PMD2 Tech & Zero Price Submitted</div>
+      <div class="tl-desc">Nick Wagner sent full package to Jason Bryan: Markosky tech/zero price, SP&K survey narrative, Sofis quote. Progress report: 36% complete.</div>
+    </div>
+    <div class="tl-item current">
+      <div class="tl-date">Feb 12, 2026</div>
+      <div class="tl-title">Progress Meeting — TODAY @ 1:30 PM</div>
+      <div class="tl-desc">Google Meet. Nick Wagner will present mainline bridge plan PDF showing progress. Originally planned as in-person at District office but moved to virtual.</div>
     </div>
     <div class="tl-item future">
       <div class="tl-date">TBD</div>
-      <div class="tl-title">PMD2 — Ramp B Deck Replacement</div>
-      <div class="tl-desc">Not yet prepared — will change scope from overlay to full deck replacement</div>
+      <div class="tl-title">WVDOH Reviews PMD2 & Approves Fee</div>
+      <div class="tl-desc">PMD2 just submitted — review/approval cycle begins</div>
     </div>
     <div class="tl-item future">
       <div class="tl-date">TBD</div>
-      <div class="tl-title">Netting Removal & Survey</div>
-      <div class="tl-desc">Can't survey until netting removed — blocking design progress</div>
+      <div class="tl-title">Netting Removal & Ramp B Survey</div>
+      <div class="tl-desc">Sofis quoted. Need top-of-deck and bottom-of-beam data for deck replacement design.</div>
     </div>
     <div class="tl-item future">
       <div class="tl-date">TBD</div>
       <div class="tl-title">60% Submission</div>
-      <div class="tl-desc">Originally targeted ~Oct 2025, now date unknown</div>
+      <div class="tl-desc">Originally targeted ~Oct 2025, now date unknown. Schedule update needed once PMD2 approved.</div>
     </div>
     <div class="tl-item future">
       <div class="tl-date">TBD</div>
@@ -358,6 +467,33 @@
   </div>
 </div>
 
+<!-- ==================== PROGRESS TREND ==================== -->
+<div class="section" id="progress">
+  <h2>Progress Trend (Monthly Reports)</h2>
+
+  <h3>Completion Over Time</h3>
+  <div class="progress-chart">
+    <div class="progress-bar" style="height:52.8%"><div class="pb-value">19%</div><div class="pb-label">Oct 7</div></div>
+    <div class="progress-bar" style="height:63.9%"><div class="pb-value">23%</div><div class="pb-label">Nov 4</div></div>
+    <div class="progress-bar" style="height:69.4%"><div class="pb-value">25%</div><div class="pb-label">Dec 10</div></div>
+    <div class="progress-bar" style="height:91.7%"><div class="pb-value">33%</div><div class="pb-label">Jan 8</div></div>
+    <div class="progress-bar" style="height:100%"><div class="pb-value">36%</div><div class="pb-label">Feb 9</div></div>
+  </div>
+
+  <h3>Monthly Report Highlights</h3>
+  <table>
+    <thead><tr><th>Date</th><th>%</th><th>Key Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Oct 7, 2025</td><td>19%</td><td>Project setup complete. RRM approved. Rehab plans started. PMD1 submitted, execution pending.</td></tr>
+      <tr><td>Nov 4, 2025</td><td>23%</td><td>TMP and MPT continuing. ODOT coordination needed for detour routes. PMD1 still pending execution.</td></tr>
+      <tr><td>Dec 10, 2025</td><td>25%</td><td>PMD1 NTP received 11/10. Field view of 35A118 scheduled for 12/10. PMD2 being prepared for Ramp B deck replacement.</td></tr>
+      <tr><td>Jan 8, 2026</td><td>33%</td><td>35A118 field inspection completed 12/11. PMD2 in process. Need contractor for netting removal to complete survey.</td></tr>
+      <tr><td>Feb 9, 2026</td><td>36%</td><td>Revised RRM (PMD1) in process. PMD2 still being assembled. Still need netting contractor. Design schedule update needed once PMD2 approved.</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--text2); font-size:0.85rem; margin-top:8px;">Note: Jump from 25% to 33% in Jan likely reflects completion of 35A118 field work and continued plan development on non-Ramp-B structures.</p>
+</div>
+
 <!-- ==================== BRIDGES ==================== -->
 <div class="section" id="bridges">
   <h2>Bridge-by-Bridge Status</h2>
@@ -365,13 +501,13 @@
 
   <div class="bridge-card" onclick="this.classList.toggle('open')">
     <div class="bc-header">
-      <div><span class="bc-name">35A114 — US 250 Main Span</span> &nbsp;<span class="badge badge-blue">Original</span></div>
-      <span class="arrow">▶</span>
+      <div><span class="bc-name">35A114 — US 250 Main Span</span> &nbsp;<span class="badge badge-green">Furthest Along</span></div>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="bc-detail">
       <p><strong>Type:</strong> Main span over interchange</p>
       <p><strong>Scope:</strong> Clean & paint steel, concrete repairs (substructure & superstructure), drainage repairs, deck overlay/sealant, bearing maintenance</p>
-      <p><strong>Status:</strong> RRM complete. Design in progress. No special flags.</p>
+      <p><strong>Status:</strong> RRM complete. Design in progress. <strong>Nick Wagner will present mainline bridge plan PDF at today's meeting</strong> — this structure was taken furthest since it has the least amount of necessary repairs.</p>
       <p><strong>ADT:</strong> ~17,000 (triggers Level III TMP)</p>
     </div>
   </div>
@@ -379,149 +515,338 @@
   <div class="bridge-card" onclick="this.classList.toggle('open')">
     <div class="bc-header">
       <div><span class="bc-name">35A122 — Ramp A</span> &nbsp;<span class="badge badge-blue">Original</span></div>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="bc-detail">
       <p><strong>Scope:</strong> Clean & paint, concrete repairs, drainage, deck overlay/sealant</p>
-      <p><strong>Status:</strong> RRM complete. Standard rehabilitation scope. No unusual issues.</p>
+      <p><strong>Status:</strong> RRM complete. Standard rehabilitation scope. No unusual issues. Plans setup complete per Nick Wagner (Feb 11 email).</p>
     </div>
   </div>
 
   <div class="bridge-card" onclick="this.classList.toggle('open')">
     <div class="bc-header">
       <div><span class="bc-name">35A117 — Ramp B</span> &nbsp;<span class="badge badge-red">Critical</span></div>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="bc-detail">
-      <p><strong>Scope (Original):</strong> Concrete overlay recommended in RRM</p>
-      <p><strong>Scope (Evolving):</strong> <span style="color:var(--red); font-weight:600;">Now needs full deck replacement</span></p>
-      <p><strong>Issue:</strong> PMD2 is being assembled but not yet prepared. This is the single biggest scope change risk on the project. Deck replacement is significantly more expensive and complex than overlay.</p>
-      <p><strong>Impact:</strong> Will require revised RRM, additional fee, extended schedule, and potentially different MOT approach.</p>
-      <p><strong>Action Needed:</strong> PMD2 must be completed to formalize the scope change.</p>
+      <p><strong>Scope (Original RRM):</strong> Concrete overlay recommended</p>
+      <p><strong>Scope (Current):</strong> <span style="color:var(--red); font-weight:600;">Full deck replacement — directed by WVDOH on Nov 5, 2025</span></p>
+      <p><strong>Why the change:</strong> Jason Bryan raised a safety concern Oct 27 — "material come loose beyond the installed netting." WVDOH Operations Management decided deck replacement is "a better long-term option for the Division."</p>
+      <p><strong>Bearing Question (Open):</strong> Nick asked WVDOH on Nov 17 about rocker bearings at Pier 3 (excessive tilt) and Pier 6 (heavy pitting). Options range from full replacement of all expansion rocker bearings to cleaning/painting + jacking/resetting. <strong>Still awaiting District direction.</strong></p>
+      <p><strong>Netting Saga:</strong></p>
+      <ul style="margin:8px 0; padding-left:20px;">
+        <li>Nov 25 — Nick asked WVDOH to pull back netting for survey (they did it for Dec 2024 inspection)</li>
+        <li>Dec 15 — Kim Hoover: "District does not have the ability... Please obtain a Subcontractor"</li>
+        <li>Dec 16 — Nick asked for contractor recommendations; Kim said she can't provide any</li>
+        <li>Dec 22 — Mike Hicks flagged pigeon droppings as complication; Nick said "we don't have experience with this"</li>
+        <li>Jan 26 — Sofis Company quoted: $3,250/day netting + $2,500/day MOT + $1,450/day flagging + $1,150 LS hardware</li>
+      </ul>
+      <p><strong>PMD2 Status:</strong> Tech & Zero Price submitted Feb 9, 2026. Includes Markosky narrative, SP&K survey, and Sofis netting quote. Awaiting WVDOH review.</p>
+      <p><strong>Survey Needed:</strong> Top-of-deck and bottom-of-beam measurements to calculate replacement deck thickness/haunch.</p>
     </div>
   </div>
 
   <div class="bridge-card" onclick="this.classList.toggle('open')">
     <div class="bc-header">
       <div><span class="bc-name">35A098 — Ramp C</span> &nbsp;<span class="badge badge-yellow">Watch</span></div>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="bc-detail">
       <p><strong>Scope:</strong> Clean & paint, concrete repairs, drainage, deck overlay/sealant</p>
       <p><strong>Added in Rev RRM:</strong> Bearing reset (item s) — bearings need to be repositioned</p>
-      <p><strong>Status:</strong> Bearing reset is a minor scope addition but worth tracking.</p>
+      <p><strong>Status:</strong> Bearing reset is a minor scope addition but worth tracking. Plans setup complete.</p>
     </div>
   </div>
 
   <div class="bridge-card" onclick="this.classList.toggle('open')">
     <div class="bc-header">
       <div><span class="bc-name">35A121 — Ramp D</span> &nbsp;<span class="badge badge-blue">Original</span></div>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="bc-detail">
       <p><strong>Scope:</strong> Clean & paint, concrete repairs, drainage, deck overlay/sealant</p>
-      <p><strong>Status:</strong> RRM complete. Standard rehabilitation scope. No unusual issues.</p>
+      <p><strong>Status:</strong> RRM complete. Standard rehabilitation scope. No unusual issues. Plans setup complete.</p>
     </div>
   </div>
 
   <div class="bridge-card" onclick="this.classList.toggle('open')">
     <div class="bc-header">
-      <div><span class="bc-name">35A118 — US 250 SB Con.-Dis.</span> &nbsp;<span class="badge badge-orange">Added via PMD1</span></div>
-      <span class="arrow">▶</span>
+      <div><span class="bc-name">35A118 — US 250 SB Con.-Dis. (27th Street)</span> &nbsp;<span class="badge badge-orange">Added via PMD1</span></div>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="bc-detail">
       <p><strong>Type:</strong> 2-span, 254.0' continuous steel multi-girder bridge</p>
+      <p><strong>Also known as:</strong> "27th Street bridge" — shares a retaining wall with the original project scope</p>
       <p><strong>Added:</strong> Sep 22, 2025 via PMD1 — this bridge should have been included in the original project and was omitted in error. Not scope creep.</p>
       <p><strong>PMD1 NTP:</strong> Nov 10, 2025</p>
       <p><strong>Field View:</strong> Completed Dec 11, 2025</p>
+      <p><strong>PMD1 Fee:</strong> Approved by Bill Murray on Oct 16, 2025 as "reasonable." Supplemental agreement drafted by Grant Dickson. Signatories: Matt Walerysiak (sign), Dave Cutlip (attest). <em>Note: the zeroed fee spreadsheet in the documents may represent the template format — the actual fee was approved.</em></p>
       <p><strong>Additional Plan Sheets:</strong> 1 general plan, 3 substructure, 2 deck, 2 framing, 1 misc details, 2 MOT</p>
-      <p><strong>Issue:</strong> <span style="color:var(--red); font-weight:600;">PMD1 fee proposal shows all zeros — fee not yet approved.</span> Work is proceeding without a formalized cost agreement.</p>
     </div>
+  </div>
+</div>
+
+<!-- ==================== EMAIL INTEL ==================== -->
+<div class="section" id="emails">
+  <h2>Email Intelligence</h2>
+  <p style="color:var(--text2); margin-bottom:18px; font-size:0.9rem;">Key email threads and decisions. Click to expand. Source: 40 .eml files spanning Jul 2025 - Feb 2026.</p>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">Ramp B Deck Replacement Decision</span> &nbsp;<span class="badge badge-red">Key Decision</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan (WVDOH) &mdash; Oct 27, 2025</div>
+        <div class="em-body">"I'm just touching base to hit on a concern that was posed to us recently... We recently had some material come loose beyond the installed netting which has understandably caused the concern to be brought to our attention."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner (Markosky) &mdash; Oct 28, 2025</div>
+        <div class="em-body">Cited Revised RRM recommendation: "Markosky strongly recommends a CONCRETE OVERLAY at Ramp B combined with full depth and underside deck spall repairs to extend its bridge life, justify removal of the temporary netting, and avoid the need for any future netting."</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan (WVDOH) &mdash; Nov 5, 2025</div>
+        <div class="em-body">"After talking to both the District and management, OM concurs and would like to move forward with a <strong>deck replacement in lieu of repairs</strong>. We understand the necessity for added cost and time but this is a better long-term option for the Division. Let's get a second PMD in workflow."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner (Markosky) &mdash; Nov 5, 2025</div>
+        <div class="em-body">"Sounds good Bryan. I will start pulling together PMD 2."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> WVDOH drove this decision. Material falling beyond netting created pressure from above. OM (Operations Management) made the call to upgrade from overlay to full deck replacement. This was not Markosky's recommendation — they recommended overlay.</p>
+    </div>
+  </div>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">Netting Removal Saga (3 months)</span> &nbsp;<span class="badge badge-orange">Bottleneck</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner (Markosky) &mdash; Nov 25, 2025</div>
+        <div class="em-body">"Will the WVDOH be able to remove the netting in the spans to allow the necessary survey? It appears that during the last bridge inspection in 12/2024 the netting was pulled back for snooper access."</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Kim Hoover (WVDOH) &mdash; Dec 15, 2025</div>
+        <div class="em-body">"The District does not have the ability at this time to assist with this work. Please obtain a Subcontractor for this work."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Dec 16, 2025</div>
+        <div class="em-body">"Is there a preferred subcontractor that you have used in the past? Also, are there any special locks or anything special with the process of removing the netting system?"</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Kim Hoover &mdash; Dec 22, 2025</div>
+        <div class="em-body">"I am not able to provide any contractor information or preference for any construction projects."</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Mike Hicks (District 6) &mdash; Dec 22, 2025</div>
+        <div class="em-body">"I'm going to contact the crew leader that has been involved with taking down this netting before. One thing that I know is an issue is that there will be a <strong>bunch of pigeon droppings</strong> to contend with."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Dec 22, 2025</div>
+        <div class="em-body">"This is something that we don't have any experience with so any insight would be helpful in finding someone that can complete this portion of the work for us."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Feb 9, 2026</div>
+        <div class="em-body">"I apologize for the delay but coordinating the netting removal has been a bit more challenging than we anticipated."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> This has been the single biggest bottleneck on the project. Markosky assumed WVDOH could handle it (they did for the 2024 inspection). WVDOH pushed it back to Markosky, wouldn't even recommend a sub. Sofis Company finally quoted Jan 26, 2026. Total delay: ~3 months and counting.</p>
+    </div>
+  </div>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">RRM Approval Delay (31 days)</span> &nbsp;<span class="badge badge-yellow">WVDOH Delay</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Jul 9, 2025</div>
+        <div class="em-body">"Nothing much to report other than we are awaiting approval of the Revised RRM that was submitted June 24th."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Jul 14, 2025</div>
+        <div class="em-body">"What is the status of the RRM approval? Just wondering when the clock is going to start ticking and properly plan for staffing."</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan &mdash; Jul 16, 2025</div>
+        <div class="em-body">"I had a build-up of fires/projects from being out for a couple weeks, and I honestly let you slip through a crack. So, thanks for keeping me honest... I feel like it's cliche to just say 'everything looks good,' but I don't have any additional comments...'looks good'"</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan &mdash; Jul 25, 2025</div>
+        <div class="em-body">"Everyone is in agreement on our end and approve the RRM. Thank you, sir."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> 31-day delay from RRM submission to approval. Jason acknowledged the delay was on his end. Pattern: WVDOH review bottleneck is consistent throughout the project.</p>
+    </div>
+  </div>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">Ramp B Bearings — Awaiting Direction</span> &nbsp;<span class="badge badge-yellow">Open Question</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Nov 17, 2025</div>
+        <div class="em-body">Detailed technical question about Ramp B expansion rocker bearings. Pier 3 has excessive tilt at Exp-Exp bearings. Pier 6 baseplates have heavy pitting. Options range from full replacement of all expansion rocker bearings to cleaning/painting + jacking/resetting of tilted bearings. "We are requesting the District's direction on how to proceed."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> This question has been open for nearly 3 months with no documented response. Bearing scope affects PMD2 cost and design. This may come up in today's meeting.</p>
+    </div>
+  </div>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">PMD Consolidation Discussion</span> &nbsp;<span class="badge badge-blue">Process</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg wvdoh">
+        <div class="em-from">Kim Hoover &mdash; Nov 6, 2025</div>
+        <div class="em-body">"Can we revise the PMD 1 adding 27th Street to also include the deck replacement work, and then only have the Supplemental Agreement No. 1, rather than two supplemental agreements?"</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Nov 6, 2025</div>
+        <div class="em-body">"We could do that. The only reservation that I would have is that with winter weather looming we would like to get out and complete the field view of the 27th Street bridge as soon as possible. With needing to revise/resubmit/review/processing of a revised PMD 1 that will probably push us into the unfavorable weather conditions. But no matter what, we can accommodate whatever the DOH prefers."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> Kim wanted to combine PMD1 + PMD2 into one supplemental for administrative simplicity. Nick diplomatically pushed back — reprocessing PMD1 would delay the 35A118 field view into winter. They appear to have kept them separate.</p>
+    </div>
+  </div>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">Bill Murray Departure + PMD1 Approval</span> &nbsp;<span class="badge badge-blue">Personnel</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg wvdoh">
+        <div class="em-from">Bill Murray (WVDOH) &mdash; Oct 16, 2025</div>
+        <div class="em-body">"This looks reasonable to me. If you both are okay with this then have Grant start working up the supplemental."</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan &mdash; Oct 21, 2025</div>
+        <div class="em-body">"I'm good to move forward with a supplemental."</div>
+      </div>
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan &mdash; Oct 22, 2025</div>
+        <div class="em-body">"In the future, we would like to include Mr. Hicks from the District and remove Mr. Murray as he's moved on to greener pastures."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> Bill Murray approved PMD1 fee just days before leaving WVDOH. Mike Hicks (District 6 Development Engineer) replaced him. Knowledge transfer risk during a critical period.</p>
+    </div>
+  </div>
+
+  <div class="email-thread" onclick="this.classList.toggle('open')">
+    <div class="et-header">
+      <div><span class="et-name">Today's Meeting Setup</span> &nbsp;<span class="badge badge-green">Current</span></div>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="et-detail">
+      <div class="email-msg wvdoh">
+        <div class="em-from">Jason Bryan &mdash; Feb 9, 2026</div>
+        <div class="em-body">"I hope everyone is sufficiently thawed this fine Monday morning! I was hoping to set up a meeting soon to discuss the US250 project... I spoke to Mike Hicks about possibly meeting in the district."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Feb 9, 2026</div>
+        <div class="em-body">"We are free to meet on Thursday this week... FYI, I will have the PMD 2 Tech and Zero Price to you today or tomorrow."</div>
+      </div>
+      <div class="email-msg markosky">
+        <div class="em-from">Nick Wagner &mdash; Feb 11, 2026</div>
+        <div class="em-body">"I will have a PDF set of the Mainline Bridges to share at the meeting to show the progress we have made and what we intend on delivering. We have all of the bridge plans setup but decided to take the mainline structure as far as we could for this progress meeting since it has the least amount of necessary repairs."</div>
+      </div>
+      <p style="margin-top:12px;"><strong>Takeaway:</strong> Originally planned in-person at District 6 office, moved to Google Meet due to scheduling. Markosky is prepared to show tangible plan progress on the mainline bridge. All bridge plans are "setup" — mainline taken furthest.</p>
+    </div>
+  </div>
+
+  <h3>Communication Dynamics</h3>
+  <div style="background:var(--surface); border-radius:10px; padding:18px; margin-top:12px; font-size:0.9rem; color:var(--text2); line-height:1.8;">
+    <p><strong>Pattern: WVDOH-side delays are consistent.</strong> Jason Bryan has acknowledged multiple delays on his end — vacation backlogs (Jul), ER visit (Aug), inbox pileup from being out (Oct). He's transparent about it and appreciative when Nick follows up. The tone is friendly and professional throughout.</p>
+    <p style="margin-top:10px;"><strong>Pattern: Nick Wagner is persistent but diplomatic.</strong> He consistently follows up without being pushy, always offers flexibility, and frames concerns constructively. He has never complained about the delays — just asks for status and adjusts.</p>
+    <p style="margin-top:10px;"><strong>Pattern: Netting removal created genuine frustration.</strong> Nick's Feb 9 comment ("more challenging than we anticipated") is the closest he gets to expressing frustration. The handoff from WVDOH ("we can't do it") to Markosky ("find a sub") to Kim ("can't recommend anyone") left Markosky navigating an unfamiliar task with no guidance.</p>
   </div>
 </div>
 
 <!-- ==================== PITFALLS ==================== -->
 <div class="section" id="pitfalls">
   <h2>Pitfalls & Red Flags</h2>
-  <p style="color:var(--text2); margin-bottom:18px; font-size:0.9rem;">Click any item to expand details. Sorted by severity.</p>
+  <p style="color:var(--text2); margin-bottom:18px; font-size:0.9rem;">Click any item to expand details. Sorted by severity. Updated with email context.</p>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
-      <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;Ramp B Deck Replacement — PMD2 Not Prepared</span>
-      <span class="arrow">▶</span>
+      <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;Ramp B Deck Replacement — PMD2 Just Submitted</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      The original RRM recommended a concrete overlay for Ramp B (35A117). The Feb 2026 progress report states PMD2 is "being assembled" for a full deck replacement — a major scope escalation. This PMD has not yet been prepared, meaning the scope change is not formalized, no additional fee has been negotiated, and the schedule impact is unknown. Deck replacement is significantly more complex and costly than overlay. <strong>This is the single biggest risk item on the project.</strong>
+      WVDOH Operations Management directed deck replacement (not just overlay) on Nov 5, 2025 after material fell beyond the netting. PMD2 Tech & Zero Price was submitted Feb 9, 2026. Still needs: WVDOH review/approval, netting removal, survey, design. The bearing scope question (Nov 17) remains unanswered. Given historical approval timelines (RRM took 31 days, PMD1 took ~7 weeks from submission to NTP), expect weeks to months before PMD2 work can begin.
     </div>
   </div>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
       <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;60% Submission Date = TBD</span>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      The original CPM schedule targeted 60% plans around Oct 2025 and PS&E around Nov 2025. As of Feb 2026, the 60% submission date is listed as "TBD." The project is 10 months past NTP with no scheduled date for the next major deliverable. The design schedule needs updating per the progress report.
+      The original CPM schedule targeted 60% plans around Oct 2025 and PS&E around Nov 2025. As of Feb 2026, the 60% submission date is listed as "TBD." The progress report notes design schedule update needed once PMD2 is approved. Nick Wagner stated he'd provide an updated schedule after RRM approval (Jul 28) — a similar update will be needed after PMD2 approval.
     </div>
   </div>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
-      <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;PMD1 Fee = $0 (Zeroed)</span>
-      <span class="arrow">▶</span>
+      <span class="pf-title"><span class="badge badge-red">High</span> &nbsp;Netting Removal — 3-Month Bottleneck</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      The PMD1 added a 6th bridge (35A118) with significant additional scope: field view, RRM update, 11+ additional plan sheets, TMP updates. The fee proposal for this work shows all hours and costs zeroed out. Markosky is effectively doing this work without an approved fee — this creates cost risk and potential disputes.
+      This has been the #1 blocker since November 2025. Markosky expected WVDOH to handle it (they did for the Dec 2024 bridge inspection). WVDOH said they can't (Dec 15), wouldn't recommend a sub (Dec 22), and flagged pigeon droppings as a complication. Markosky finally got a Sofis quote on Jan 26. The netting work requires single-lane closures with MOT ($2,500/day) plus $3,250/day for equipment/labor. Still needs to actually be scheduled and executed.
     </div>
   </div>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
-      <span class="pf-title"><span class="badge badge-red">High</span> &nbsp;Netting Removal Blocking Survey Access</span>
-      <span class="arrow">▶</span>
+      <span class="pf-title"><span class="badge badge-orange">High</span> &nbsp;Ramp B Bearing Scope — No Answer in 3 Months</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      Existing safety netting on the bridges is preventing survey crews from accessing the structures. Survey data is needed for design. Until the netting is removed, design work cannot progress on certain elements. This is an external dependency that the design team cannot control.
+      Nick Wagner sent a detailed technical question about Ramp B rocker bearings on Nov 17, 2025. Options range from full replacement (expensive) to cleaning/resetting (cheaper). No documented response from WVDOH in nearly 3 months. This affects PMD2 scope, cost, and design. Should be raised in today's meeting.
     </div>
   </div>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
       <span class="pf-title"><span class="badge badge-orange">High</span> &nbsp;Utility Coordination Not Started</span>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      The progress report notes utility coordination has not started — 10 months into the project. Utility conflicts discovered late in design are one of the most common causes of construction delays and change orders. The bridges carry or cross utilities that need to be identified and protected or relocated.
+      The progress report notes utility coordination has not started — 10 months into the project. Utility conflicts discovered late in design are one of the most common causes of construction delays and change orders.
     </div>
   </div>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
-      <span class="pf-title"><span class="badge badge-orange">Medium</span> &nbsp;ODOT Coordination Needed for Detour Routes</span>
-      <span class="arrow">▶</span>
+      <span class="pf-title"><span class="badge badge-yellow">Medium</span> &nbsp;WVDOH Review Bottleneck Pattern</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      The interchange sits at the WV-OH state line. Detour routes during construction may route traffic through Ohio, requiring ODOT coordination. This interstate coordination adds complexity and time to the MOT design process and has not been finalized.
+      Consistent pattern of WVDOH-side delays: RRM approval took 31 days (Jason acknowledged delay). PMD1 went from submission (Sep 22) to NTP (Nov 10) — 7 weeks. Multiple delays attributed to Jason being out, inbox backlog, vacation, ER visit. Bill Murray leaving mid-project added friction. Expect PMD2 review to follow a similar timeline.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-yellow">Medium</span> &nbsp;ODOT Coordination Needed for Detour Routes</span>
+      <span class="arrow">&#9654;</span>
+    </div>
+    <div class="pf-body">
+      The interchange sits at the WV-OH state line. Detour routes during construction may route traffic through Ohio, requiring ODOT coordination. Flagged in the Nov 2025 progress report. No documented progress.
     </div>
   </div>
 
   <div class="pitfall" onclick="this.classList.toggle('open')">
     <div class="pf-head">
       <span class="pf-title"><span class="badge badge-yellow">Medium</span> &nbsp;Fee Was Cut $46K Before Work Started</span>
-      <span class="arrow">▶</span>
+      <span class="arrow">&#9654;</span>
     </div>
     <div class="pf-body">
-      The fee was reduced from $508,102 to $462,144 (a 9% cut, 426 hours removed) before NTP, primarily in Structure Rehab hours. With scope increasing (6th bridge, Ramp B deck replacement), the reduced fee base may not be adequate. Watch for supplemental fee requests.
-    </div>
-  </div>
-
-  <div class="pitfall" onclick="this.classList.toggle('open')">
-    <div class="pf-head">
-      <span class="pf-title"><span class="badge badge-yellow">Medium</span> &nbsp;NTP Slipped 2 Months at the Start</span>
-      <span class="arrow">▶</span>
-    </div>
-    <div class="pf-body">
-      Original proposal assumed NTP of Feb 3, 2025. Actual NTP was Apr 4, 2025 — a 2-month slip before work even began. This suggests the project had contracting/approval delays from the start, which may recur with PMD2 approvals.
+      The fee was reduced from $508,102 to $462,144 (a 9% cut, 426 hours removed) before NTP, primarily in Structure Rehab hours. With PMD1 and PMD2 adding scope, the fee pressure will increase. PMD2 will bring its own supplemental fee.
     </div>
   </div>
 </div>
@@ -529,30 +854,36 @@
 <!-- ==================== UNCLEAR ==================== -->
 <div class="section" id="unclear">
   <h2>Unclear / Ambiguous Items</h2>
+  <p style="color:var(--text2); margin-bottom:18px; font-size:0.9rem;">Updated with email context.</p>
 
   <div class="unclear">
     <div class="unc-title">What is the actual target date for 60% submission?</div>
-    <div class="unc-body">The progress report simply says "TBD." There's no updated CPM schedule in the documents. Ask Markosky for a revised schedule showing the critical path to 60% and PS&E.</div>
+    <div class="unc-body">The progress report says "TBD" and notes the design schedule needs updating once PMD2 is approved. Nick Wagner said he'd provide an updated schedule (like he did after RRM approval on Jul 28). Ask when this updated schedule will be delivered.</div>
   </div>
 
   <div class="unclear">
-    <div class="unc-title">What is the cost impact of PMD1 (6th bridge)?</div>
-    <div class="unc-body">The fee proposal for PMD1 is zeroed out — there's no approved dollar amount for the additional work. It's unclear if Markosky is absorbing this cost, if a fee is being negotiated, or if this is an oversight.</div>
+    <div class="unc-title">What is the bearing scope for Ramp B?</div>
+    <div class="unc-body">Nick asked WVDOH on Nov 17 for direction on rocker bearings — full replacement vs. cleaning/resetting. No documented response in nearly 3 months. This affects PMD2 cost and design. Need an answer at today's meeting.</div>
   </div>
 
   <div class="unclear">
-    <div class="unc-title">What is the scope and cost of PMD2 (Ramp B deck replacement)?</div>
-    <div class="unc-body">PMD2 is described as "being assembled" but no details are available. The jump from overlay to deck replacement is a significant cost and schedule escalation that hasn't been quantified.</div>
+    <div class="unc-title">What is the cost of PMD2?</div>
+    <div class="unc-body">PMD2 Tech & Zero Price was submitted Feb 9 — "zero price" means the pricing hasn't been populated yet. The actual fee negotiation hasn't happened. Sofis netting work alone is ~$7,000+/day. SP&K survey is a separate sub cost. Total PMD2 fee is unknown.</div>
   </div>
 
   <div class="unclear">
-    <div class="unc-title">Who is responsible for netting removal, and when will it happen?</div>
-    <div class="unc-body">The netting is blocking survey access, but the documents don't specify who owns this task, what the cost is, or when it's scheduled. This is a critical-path blocker.</div>
+    <div class="unc-title">When will netting actually be removed?</div>
+    <div class="unc-body">Sofis quoted Jan 26 and the quote is included in the PMD2 package, but no date has been set for the actual netting removal. It needs MOT (lane closures on a 17,000 ADT road) and favorable weather. Sofis has a 50% cancellation charge within 5 business days.</div>
+  </div>
+
+  <div class="unclear">
+    <div class="unc-title">Is PMD1 fee actually approved or still zeroed?</div>
+    <div class="unc-body">Bill Murray called the PMD1 fee "reasonable" on Oct 16 and told Grant Dickson to draft the supplemental. The zeroed spreadsheet in the files may be a template. But the supplemental agreement execution isn't explicitly confirmed in the emails. Clarify status.</div>
   </div>
 
   <div class="unclear">
     <div class="unc-title">Has ODOT been contacted about detour routes?</div>
-    <div class="unc-body">The need for ODOT coordination on Ohio-side detours is mentioned but there's no indication it has started. Cross-state coordination can have long lead times.</div>
+    <div class="unc-body">Flagged in Nov 2025 progress report. No documented progress. Cross-state coordination can have long lead times.</div>
   </div>
 </div>
 
@@ -561,28 +892,33 @@
   <h2>What's Going Well</h2>
 
   <div class="positive">
-    <div class="pos-title">Field Work Went Smoothly</div>
-    <div class="pos-body">The May 2025 field inspection found "no major concerns beyond originally anticipated scope." The field crew (Dietrich & Bacho) completed assessment of all 5 original bridges in a single visit. The 6th bridge field view was also completed on schedule (Dec 11, 2025).</div>
+    <div class="pos-title">Markosky Is Working Through the Blockers, Not Sitting Idle</div>
+    <div class="pos-body">While waiting on PMD2 approvals and netting removal, Markosky has been advancing plans on the other 5 structures and the TMP. Nick Wagner: "We have all of the bridge plans setup" and will present the mainline bridge (35A114) plans at today's meeting. This shows productive use of time despite blockers.</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">Field Work Went Smoothly — Both Rounds</div>
+    <div class="pos-body">The May 2025 inspection found "no major concerns beyond originally anticipated scope." The 35A118 field view was completed on schedule (Dec 11, 2025), just one month after PMD1 NTP. Nick pushed to get it done before winter weather hit.</div>
   </div>
 
   <div class="positive">
     <div class="pos-title">RRM Was Delivered On Time</div>
-    <div class="pos-body">The original RRM was submitted Jun 4, 2025 — within the NTP + 60 days target. The revised RRM (Jun 24) was turned around quickly after the Jun 18 progress meeting, showing good consultant responsiveness.</div>
+    <div class="pos-body">The original RRM was submitted Jun 4, 2025 — within the NTP + 60 days target. The revised RRM (Jun 24) was turned around in 6 days after the Jun 18 progress meeting.</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">Good Working Relationship</div>
+    <div class="pos-body">Email tone between Nick Wagner and Jason Bryan is consistently professional, friendly, and transparent. Jason is upfront about delays on his end. Nick is patient and accommodating. No adversarial dynamics.</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">PMD2 Package Is Now Submitted</div>
+    <div class="pos-body">As of Feb 9, the PMD2 Tech & Zero Price is in WVDOH's hands with all subconsultant materials (Markosky narrative, SP&K survey, Sofis netting/MOT quote). The ball is now in WVDOH's court for review.</div>
   </div>
 
   <div class="positive">
     <div class="pos-title">Scope Is Well-Documented</div>
-    <div class="pos-body">The project narrative, RRMs, and PMD provide thorough documentation of scope. Repair recommendations are itemized per bridge with specific repair methods. The document trail is clear and traceable.</div>
-  </div>
-
-  <div class="positive">
-    <div class="pos-title">No Surprises on Original 5 Bridges</div>
-    <div class="pos-body">Field conditions on the original 5 bridges matched expectations from the scope of work meeting. The only scope additions were minor: concrete protective coating for substructures and Ramp C bearing reset.</div>
-  </div>
-
-  <div class="positive">
-    <div class="pos-title">PMD1 Process Worked Correctly</div>
-    <div class="pos-body">The addition of the 6th bridge (35A118) followed proper WVDOH process: PMD prepared → approved → NTP issued → field view completed. The documentation is thorough with full narrative and additional plan sheet breakdown.</div>
+    <div class="pos-body">The project narrative, RRMs, PMDs, and email correspondence provide thorough documentation. Every scope decision has a paper trail with clear attribution.</div>
   </div>
 </div>
 
@@ -607,17 +943,30 @@
         <td>Cut $46K / 426 hrs — mainly Structure Rehab</td>
       </tr>
       <tr>
-        <td>PMD1 Fee (6th Bridge)</td><td>Sep 22, 2025</td>
-        <td class="money" style="color:var(--red)">$0</td><td>0</td>
-        <td style="color:var(--red)">All values zeroed — not approved</td>
+        <td>PMD1 Fee (6th Bridge)</td><td>Oct 16, 2025</td>
+        <td class="money" style="color:var(--yellow)">Approved*</td><td>--</td>
+        <td>Bill Murray: "reasonable." Supplemental drafted by Grant Dickson. *Zeroed spreadsheet may be template format.</td>
       </tr>
       <tr>
-        <td>PMD2 Fee (Ramp B)</td><td>TBD</td>
-        <td class="money" style="color:var(--text2)">TBD</td><td>TBD</td>
-        <td>Not yet prepared</td>
+        <td>PMD2 Tech & Zero Price</td><td>Feb 9, 2026</td>
+        <td class="money" style="color:var(--text2)">$0 (zeroed)</td><td>0</td>
+        <td>Submitted for WVDOH review. Includes Markosky, SP&K, Sofis.</td>
       </tr>
     </tbody>
   </table>
+
+  <h3>Sofis Netting/MOT Quote (Jan 26, 2026)</h3>
+  <table>
+    <thead><tr><th>Item</th><th>Rate</th></tr></thead>
+    <tbody>
+      <tr><td>MOT single lane closure with work truck, arrowboard & TMA</td><td class="money">$2,500/day</td></tr>
+      <tr><td>MPT flagging with work truck</td><td class="money">$1,450/day</td></tr>
+      <tr><td>85-ft JLG with equipment truck + 2 laborers for netting</td><td class="money">$3,250/day</td></tr>
+      <tr><td>Removal & installation of new hardware (100 fasteners)</td><td class="money">$1,150 LS</td></tr>
+      <tr><td>Mobilization</td><td>No charge</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--text2); font-size:0.85rem;">8-hour call out time. 50% cancellation charge within 5 business days. Quote to Markosky (Attn: Bryan Dietrich) from William J. Sofis, Jr., President.</p>
 
   <h3>Contract Parameters</h3>
   <div class="card-grid">
@@ -653,44 +1002,115 @@
 <!-- ==================== PEOPLE ==================== -->
 <div class="section" id="people">
   <h2>Key People</h2>
+  <h3>WVDOH (Client)</h3>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--orange)">JB</div>
+    <div>
+      <div class="person-name">Jason D. Bryan</div>
+      <div class="person-role">WVDOH Project Manager, Operations/Management &mdash; jason.d.bryan@wv.gov. Primary WVDOH contact. Called today's meeting. Made the Ramp B deck replacement decision. Transparent about delays on his end. Friendly and collaborative tone.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--orange)">KH</div>
+    <div>
+      <div class="person-name">Kimberly D. Hoover</div>
+      <div class="person-role">WVDOH TRET Sr/Chemist, Operations Division &mdash; kimberly.d.hoover@wv.gov. Handles fee proposals and supplemental agreements. Suggested combining PMDs. Said District can't remove netting and can't recommend subs.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--orange)">MH</div>
+    <div>
+      <div class="person-name">Michael J. Hicks</div>
+      <div class="person-role">District 6 Development Engineer &mdash; mike.j.hicks@wv.gov. Replaced Bill Murray on the project (Oct 2025). Flagged pigeon droppings issue with netting. Planned to contact crew leader about netting removal process.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--orange)">GD</div>
+    <div>
+      <div class="person-name">Grant A. Dickson</div>
+      <div class="person-role">WVDOH Contracts/Supplemental Agreements &mdash; grant.a.dickson@wv.gov. Drafted the PMD1 supplemental agreement.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--surface2)">BM</div>
+    <div>
+      <div class="person-name">Bill R. Murray</div>
+      <div class="person-role">Former WVDOH &mdash; Left Oct 2025 ("moved on to greener pastures" per Jason). Approved PMD1 fee just before departure. No longer on the project.</div>
+    </div>
+  </div>
+
+  <h3>Markosky Engineering (Consultant)</h3>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--accent)">NW</div>
+    <div>
+      <div class="person-name">Nick Wagner, PE</div>
+      <div class="person-role">Assistant Department Manager, Roadway &mdash; nwagner@markosky.com. Primary Markosky contact. Writes all project correspondence. Persistent, diplomatic, professional. Handles all WVDOH coordination.</div>
+    </div>
+  </div>
 
   <div class="person">
     <div class="person-avatar" style="background:var(--accent)">BD</div>
     <div>
       <div class="person-name">Bryan Dietrich, PE, CBSI</div>
-      <div class="person-role">Field Inspector — Markosky Engineering. Led the May 12, 2025 field assessment. Certified Bridge Safety Inspector.</div>
+      <div class="person-role">Engineer &mdash; bdietrich@markosky.com. Led field inspections (May 12 and Dec 11). Certified Bridge Safety Inspector. Point of contact for Sofis netting quote.</div>
     </div>
   </div>
 
   <div class="person">
-    <div class="person-avatar" style="background:var(--accent2)">DB</div>
+    <div class="person-avatar" style="background:var(--accent)">SR</div>
     <div>
-      <div class="person-name">Dominic Bacho, EIT</div>
-      <div class="person-role">Field Inspector — Markosky Engineering. Assisted with May 12, 2025 field assessment.</div>
+      <div class="person-name">Shane P. Ritenour</div>
+      <div class="person-role">Engineer &mdash; sritenour@markosky.com. CC'd on project correspondence.</div>
     </div>
   </div>
 
   <div class="person">
-    <div class="person-avatar" style="background:var(--green)">JW</div>
+    <div class="person-avatar" style="background:var(--accent)">FS</div>
     <div>
-      <div class="person-name">Jason (Last Name TBD)</div>
-      <div class="person-role">PMD signatory — likely WVDOH project authority. Signed PMD1 approval.</div>
+      <div class="person-name">Frank M. Strittmatter</div>
+      <div class="person-role">Engineer &mdash; fstrittmatter@markosky.com. CC'd on project correspondence.</div>
+    </div>
+  </div>
+
+  <h3>Subconsultants</h3>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--accent2)">SP</div>
+    <div>
+      <div class="person-name">SP&K (Survey Subconsultant)</div>
+      <div class="person-role">Survey tech narrative and zero fee submitted as part of PMD2 package (Feb 9). Will perform Ramp B deck survey once netting is removed.</div>
     </div>
   </div>
 
   <div class="person">
-    <div class="person-avatar" style="background:var(--orange)">MK</div>
+    <div class="person-avatar" style="background:var(--accent2)">SF</div>
     <div>
-      <div class="person-name">Markosky Engineering Group, Inc.</div>
-      <div class="person-role">Prime consultant. Headquartered in Uniontown, PA. Handling all design, RRMs, TMP, and plan development.</div>
+      <div class="person-name">Sofis Company</div>
+      <div class="person-role">Netting removal and MOT subcontractor. William J. Sofis, Jr., President. Quoted Jan 26, 2026 for netting work on Ramp B.</div>
+    </div>
+  </div>
+
+  <h3>Signatories (Contract)</h3>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--surface2)">MW</div>
+    <div>
+      <div class="person-name">Matt Walerysiak</div>
+      <div class="person-role">Markosky signatory for agreements (signs). Confirmed by Nick for supplemental agreement.</div>
     </div>
   </div>
 
   <div class="person">
-    <div class="person-avatar" style="background:var(--surface2)">D6</div>
+    <div class="person-avatar" style="background:var(--surface2)">DC</div>
     <div>
-      <div class="person-name">WVDOH District 6</div>
-      <div class="person-role">Owner/client district office. Oversees the project from WVDOH side.</div>
+      <div class="person-name">Dave Cutlip</div>
+      <div class="person-role">Markosky attestor for agreements (attests to Matt's signature).</div>
     </div>
   </div>
 </div>
@@ -702,36 +1122,36 @@
   <div class="bottom-line" style="margin-top:0">
     <h3>The Big Picture</h3>
     <p style="margin-bottom:16px; font-size:0.95rem; line-height:1.8;">
-      This is a bridge rehabilitation project that started well — good field work, no surprises on original scope, timely RRM — but is now <strong>significantly behind schedule</strong> with <strong>expanded scope</strong> and <strong>unresolved blockers</strong>. Note: the 6th bridge (PMD1) was added to correct an omission, not scope creep — the schedule impact was anticipated.
+      This is a bridge rehabilitation project that started well — good field work, no surprises on original scope, timely RRM — but is now <strong>behind schedule</strong> with <strong>expanded scope</strong> and <strong>blockers that took months to resolve</strong>. The 6th bridge (PMD1) was added to correct an omission, not scope creep — the schedule impact was anticipated. The Ramp B deck replacement (PMD2) was directed by WVDOH after material fell beyond the safety netting. Markosky has been working on the other structures while waiting on PMD2 blockers.
     </p>
     <ul>
-      <li><strong>Schedule:</strong> 36% complete after 10 months. Originally expected PS&E by Nov 2025 — now 60% plans don't even have a target date.</li>
-      <li><strong>Scope growth:</strong> Started as 5-bridge rehab. Now 6 bridges — the 6th (35A118) was a bridge that should have been included originally and was added via PMD1 to correct the omission. Ramp B is also potentially jumping from overlay to full deck replacement (PMD2).</li>
-      <li><strong>Money:</strong> Fee was already cut 9% before starting. PMD1 work has no approved fee. PMD2 cost is unknown.</li>
-      <li><strong>Blockers:</strong> Netting removal → survey → design. Until netting comes down, design can't advance on certain elements.</li>
-      <li><strong>Gaps:</strong> Utility coordination not started. ODOT detour coordination status unknown. Updated CPM schedule needed.</li>
+      <li><strong>Schedule:</strong> 36% complete after 10 months. 60% plans date is TBD — schedule update pending PMD2 approval.</li>
+      <li><strong>PMD2:</strong> Tech & Zero Price submitted Feb 9. WVDOH directed deck replacement Nov 5. Bearing question unanswered since Nov 17.</li>
+      <li><strong>Netting:</strong> 3-month saga. WVDOH couldn't remove it, wouldn't recommend a sub. Sofis quoted Jan 26. Still not scheduled.</li>
+      <li><strong>Progress despite blockers:</strong> All bridge plans are "setup." Mainline bridge (35A114) taken furthest. TMP work continuing.</li>
+      <li><strong>Gaps:</strong> Utility coordination not started. ODOT detour coordination status unknown.</li>
     </ul>
   </div>
 
   <div style="margin-top:24px; background:var(--surface); border-radius:12px; padding:24px; border-left:4px solid var(--accent);">
-    <h3 style="color:var(--accent); margin-bottom:12px;">Questions to Ask in the Meeting</h3>
+    <h3 style="color:var(--accent); margin-bottom:12px;">Questions to Ask in Today's Meeting</h3>
     <ol style="padding-left:20px; line-height:2.2; font-size:0.95rem;">
+      <li>What is the <strong>timeline for WVDOH to review PMD2</strong> Tech & Zero Price? When can we expect approval?</li>
+      <li>What is the <strong>direction on Ramp B bearings</strong>? Full replacement or cleaning/resetting? (Open since Nov 17)</li>
+      <li>When can we schedule the <strong>netting removal</strong> with Sofis? What's the approval path?</li>
       <li>When will Markosky deliver an <strong>updated CPM schedule</strong> with a firm 60% submission date?</li>
-      <li>What is the <strong>timeline and responsibility</strong> for netting removal?</li>
-      <li>When will the <strong>PMD1 fee</strong> be finalized? Is Markosky working at risk?</li>
-      <li>What is the <strong>preliminary cost estimate</strong> for PMD2 (Ramp B deck replacement)?</li>
-      <li>When will <strong>utility coordination</strong> begin, and who is the point of contact?</li>
-      <li>Has anyone <strong>contacted ODOT</strong> about detour routes through Ohio?</li>
-      <li>Is the <strong>$462K fee</strong> still realistic given PMD1 + potential PMD2 scope additions?</li>
+      <li>When will <strong>utility coordination</strong> begin?</li>
+      <li>What is the status of <strong>ODOT coordination</strong> for Ohio-side detour routes?</li>
+      <li>Is the <strong>PMD1 supplemental agreement fully executed</strong>? Is there an approved fee amount?</li>
     </ol>
   </div>
 
   <div style="margin-top:24px; background:rgba(239,68,68,0.08); border-radius:12px; padding:24px; border-left:4px solid var(--red);">
     <h3 style="color:var(--red); margin-bottom:12px;">If You Only Remember 3 Things</h3>
     <ol style="padding-left:20px; line-height:2.2; font-size:1rem; font-weight:500;">
-      <li>Project is <strong>behind schedule</strong> — 60% plans date is TBD, ~4+ months late</li>
-      <li><strong>Ramp B deck replacement</strong> (PMD2) is the biggest risk — not yet formalized</li>
-      <li><strong>PMD1 fee is $0</strong> — 6th bridge work has no approved cost</li>
+      <li><strong>PMD2 was just submitted</strong> (Feb 9) — WVDOH needs to review it promptly to avoid further delays</li>
+      <li><strong>Ramp B bearing question</strong> has been unanswered for 3 months — need direction today</li>
+      <li>Markosky has been <strong>productive despite blockers</strong> — all bridge plans are set up, mainline taken furthest</li>
     </ol>
   </div>
 </div>
