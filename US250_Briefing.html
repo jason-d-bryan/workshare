@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US 250 Interchange Bridges — Meeting Briefing</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #334155;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+    --orange: #f97316;
+    --text: #f1f5f9;
+    --text2: #94a3b8;
+    --border: #475569;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* Top Bar */
+  .topbar { background: linear-gradient(135deg, #1e3a5f, #0f172a); border-bottom: 2px solid var(--accent); padding: 18px 32px; position: sticky; top: 0; z-index: 100; }
+  .topbar h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; }
+  .topbar .subtitle { color: var(--text2); font-size: 0.85rem; margin-top: 2px; }
+
+  /* Nav Tabs */
+  .nav { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 80px; z-index: 99; overflow-x: auto; }
+  .nav button { background: none; border: none; color: var(--text2); padding: 14px 22px; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; font-family: inherit; }
+  .nav button:hover { color: var(--text); background: var(--surface2); }
+  .nav button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* Sections */
+  .section { display: none; padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section h2 { font-size: 1.3rem; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .section h3 { font-size: 1.05rem; margin: 18px 0 10px; color: var(--accent); }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; transition: transform 0.15s, box-shadow 0.15s; cursor: default; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .card .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600; }
+  .card .card-value { font-size: 1.5rem; font-weight: 700; }
+  .card .card-note { font-size: 0.8rem; color: var(--text2); margin-top: 4px; }
+
+  /* Badge */
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .badge-yellow { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .badge-blue { background: rgba(59,130,246,0.15); color: var(--accent); }
+  .badge-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 22px; }
+  .tl-item::before { content: ''; position: absolute; left: -25px; top: 6px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--accent); background: var(--bg); }
+  .tl-item.done::before { background: var(--green); border-color: var(--green); }
+  .tl-item.current::before { background: var(--yellow); border-color: var(--yellow); box-shadow: 0 0 8px rgba(234,179,8,0.5); }
+  .tl-item.future::before { background: var(--surface); border-color: var(--text2); }
+  .tl-item.problem::before { background: var(--red); border-color: var(--red); }
+  .tl-date { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+  .tl-title { font-weight: 600; margin: 2px 0; }
+  .tl-desc { font-size: 0.85rem; color: var(--text2); }
+
+  /* Pitfalls */
+  .pitfall { background: var(--surface); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 12px; cursor: pointer; }
+  .pitfall .pf-head { display: flex; justify-content: space-between; align-items: center; }
+  .pitfall .pf-title { font-weight: 600; }
+  .pitfall .pf-body { display: none; margin-top: 10px; font-size: 0.9rem; color: var(--text2); line-height: 1.7; }
+  .pitfall.open .pf-body { display: block; }
+  .pitfall .arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text2); }
+  .pitfall.open .arrow { transform: rotate(90deg); }
+
+  /* Positive items */
+  .positive { background: var(--surface); border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 12px; }
+  .positive .pos-title { font-weight: 600; color: var(--green); }
+  .positive .pos-body { margin-top: 6px; font-size: 0.9rem; color: var(--text2); }
+
+  /* Unclear items */
+  .unclear { background: var(--surface); border-left: 4px solid var(--yellow); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 12px; }
+  .unclear .unc-title { font-weight: 600; color: var(--yellow); }
+  .unclear .unc-body { margin-top: 6px; font-size: 0.9rem; color: var(--text2); }
+
+  /* Bridge Cards */
+  .bridge-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; cursor: pointer; }
+  .bridge-card .bc-header { display: flex; justify-content: space-between; align-items: center; }
+  .bridge-card .bc-name { font-weight: 700; font-size: 1.05rem; }
+  .bridge-card .bc-detail { display: none; margin-top: 14px; font-size: 0.9rem; color: var(--text2); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 14px; }
+  .bridge-card.open .bc-detail { display: block; }
+  .bridge-card .arrow { transition: transform 0.2s; font-size: 0.8rem; color: var(--text2); }
+  .bridge-card.open .arrow { transform: rotate(90deg); }
+
+  /* Fee Table */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.9rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface2); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { background: var(--surface); }
+  tr:hover td { background: var(--surface2); }
+  .money { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .strikethrough { text-decoration: line-through; color: var(--text2); }
+
+  /* People */
+  .person { display: flex; align-items: center; gap: 14px; background: var(--surface); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+  .person-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+  .person-name { font-weight: 600; }
+  .person-role { font-size: 0.85rem; color: var(--text2); }
+
+  /* Bottom Line */
+  .bottom-line { background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1)); border: 1px solid var(--accent); border-radius: 12px; padding: 24px; margin-top: 20px; }
+  .bottom-line h3 { color: var(--accent); margin: 0 0 12px; font-size: 1.1rem; }
+  .bottom-line ul { list-style: none; padding: 0; }
+  .bottom-line li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 0.95rem; }
+  .bottom-line li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+
+  /* Schedule Comparison */
+  .sched-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; margin-bottom: 1px; font-size: 0.9rem; }
+  .sched-row > div { padding: 10px 14px; background: var(--surface); }
+  .sched-head > div { background: var(--surface2); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
+  .slip { color: var(--red); font-weight: 600; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .section { padding: 18px 16px; }
+    .nav button { padding: 12px 14px; font-size: 0.82rem; }
+    .topbar { padding: 14px 16px; }
+    .sched-row { grid-template-columns: 1fr; }
+  }
+
+  /* Quick-reference tooltip */
+  .tip { position: relative; border-bottom: 1px dotted var(--text2); cursor: help; }
+  .tip:hover::after { content: attr(data-tip); position: absolute; bottom: 100%; left: 0; background: var(--surface2); color: var(--text); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; white-space: nowrap; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+  /* Print */
+  @media print {
+    .nav, .topbar { position: static; }
+    .section { display: block !important; page-break-inside: avoid; }
+    body { background: #fff; color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>US 250 Interchange Bridges — Project Briefing</h1>
+  <div class="subtitle">State Project S335-250-12.80 &nbsp;|&nbsp; Federal Project NHPP-0250(281)D &nbsp;|&nbsp; Wheeling, WV (Ohio County) &nbsp;|&nbsp; As of Feb 9, 2026</div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="active" data-tab="dashboard">Dashboard</button>
+  <button data-tab="timeline">Timeline</button>
+  <button data-tab="bridges">Bridges</button>
+  <button data-tab="pitfalls">Pitfalls & Risks</button>
+  <button data-tab="unclear">Unclear Items</button>
+  <button data-tab="positives">What's Going Well</button>
+  <button data-tab="fees">Fee & Budget</button>
+  <button data-tab="people">Key People</button>
+  <button data-tab="bottomline">Bottom Line</button>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="section active" id="dashboard">
+  <h2>Project Dashboard</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label" style="color:var(--accent)">Completion</div>
+      <div class="card-value">36%</div>
+      <div class="card-note">As of Feb 9, 2026 progress report</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--green)">Approved Fee</div>
+      <div class="card-value">$462,144</div>
+      <div class="card-note">Revised from original $508,102 (cut ~$46K / 426 hrs)</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--yellow)">Bridges</div>
+      <div class="card-value">6</div>
+      <div class="card-note">5 original + 1 corrected omission via PMD1 (35A118)</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--red)">60% Submission</div>
+      <div class="card-value">TBD</div>
+      <div class="card-note">Not yet scheduled — originally targeted Oct 2025</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--orange)">NTP</div>
+      <div class="card-value">Apr 4, 2025</div>
+      <div class="card-note">PMD1 NTP: Nov 10, 2025</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--accent2)">Consultant</div>
+      <div class="card-value" style="font-size:1.15rem">Markosky Engineering</div>
+      <div class="card-note">Cost-Plus Fixed Fee contract</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--red)">PMD1 Fee</div>
+      <div class="card-value" style="color:var(--red)">$0 (Zeroed)</div>
+      <div class="card-note">Fee proposal for 6th bridge work shows all zeros — not yet approved</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--yellow)">Utility Coord</div>
+      <div class="card-value" style="color:var(--yellow)">Not Started</div>
+      <div class="card-note">10 months in with zero utility coordination</div>
+    </div>
+  </div>
+
+  <div class="bottom-line">
+    <h3>Quick Take for Your Meeting</h3>
+    <ul>
+      <li>Project is <strong>behind schedule</strong> — 36% complete after 10 months, 60% plans date is TBD</li>
+      <li>The 6th bridge (PMD1) was an <strong>omission correction</strong>, not scope creep — schedule delay was expected and accepted</li>
+      <li><strong>Ramp B deck replacement</strong> is the biggest scope risk — PMD2 not yet prepared</li>
+      <li><strong>PMD1 fee is zeroed out</strong> — Markosky is doing 6th bridge work without an approved fee</li>
+      <li><strong>Netting removal</strong> is blocking survey access needed for design progress</li>
+      <li><strong>Utility coordination hasn't started</strong> — potential late-stage surprises</li>
+      <li>RRM and field work have gone smoothly — "no major concerns beyond originally anticipated scope"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== TIMELINE ==================== -->
+<div class="section" id="timeline">
+  <h2>Project Timeline</h2>
+
+  <h3>Planned vs. Actual Schedule</h3>
+  <div style="border-radius:8px; overflow:hidden; border:1px solid var(--border); margin-bottom:28px;">
+    <div class="sched-row sched-head">
+      <div>Milestone</div><div>Planned</div><div>Actual</div>
+    </div>
+    <div class="sched-row">
+      <div>Fee Proposal</div><div>Jan 9, 2025</div><div>Jan 9, 2025 ✓</div>
+    </div>
+    <div class="sched-row">
+      <div>Revised Fee</div><div>—</div><div>Feb 14, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>NTP</div><div>Feb 3, 2025</div><div>Apr 4, 2025 <span class="slip">(+2 mo)</span></div>
+    </div>
+    <div class="sched-row">
+      <div>Field Inspection</div><div>NTP + 30 days</div><div>May 12, 2025 ✓</div>
+    </div>
+    <div class="sched-row">
+      <div>RRM Submitted</div><div>NTP + 60 days</div><div>Jun 4, 2025 ✓</div>
+    </div>
+    <div class="sched-row">
+      <div>Revised RRM</div><div>—</div><div>Jun 24, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>PMD1 (6th Bridge)</div><div>—</div><div>Sep 22, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>PMD1 NTP</div><div>—</div><div>Nov 10, 2025</div>
+    </div>
+    <div class="sched-row">
+      <div>35A118 Field View</div><div>—</div><div>Dec 11, 2025 ✓</div>
+    </div>
+    <div class="sched-row">
+      <div>60% Submission</div><div>~Oct 2025</div><div class="slip">TBD — not scheduled</div>
+    </div>
+    <div class="sched-row">
+      <div>PS&E</div><div>~Nov 2025</div><div class="slip">TBD — not scheduled</div>
+    </div>
+  </div>
+
+  <h3>Full Chronological Timeline</h3>
+  <div class="timeline">
+    <div class="tl-item done">
+      <div class="tl-date">Oct 16, 2024</div>
+      <div class="tl-title">Scope of Work Meeting</div>
+      <div class="tl-desc">WVDOH and Markosky align on project scope for 5 bridges</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Dec 23, 2024</div>
+      <div class="tl-title">Zero Fee Proposal Template Submitted</div>
+      <div class="tl-desc">Template with narrative but all hours/costs zeroed</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Jan 9, 2025</div>
+      <div class="tl-title">Original Fee Proposal — $508,102 / 3,526 hrs</div>
+      <div class="tl-desc">Full 54-page proposal with CPM schedule, targeting Feb 3 NTP</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Feb 14, 2025</div>
+      <div class="tl-title">Revised Fee Proposal — $462,144 / 3,100 hrs</div>
+      <div class="tl-desc">Cut ~$46K and 426 hours, mainly in Structure Rehab hours</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Apr 4, 2025</div>
+      <div class="tl-title">Notice to Proceed (NTP)</div>
+      <div class="tl-desc">2 months later than originally planned Feb 3 date</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">May 12, 2025</div>
+      <div class="tl-title">Field Inspection — 5 Bridges</div>
+      <div class="tl-desc">Bryan Dietrich PE CBSI and Dominic Bacho EIT inspect all 5 structures</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Jun 4, 2025</div>
+      <div class="tl-title">Original RRM Submitted</div>
+      <div class="tl-desc">"No major concerns beyond originally anticipated scope." Recommended concrete overlay for Ramp B, sealant for all decks.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Jun 18, 2025</div>
+      <div class="tl-title">Progress Meeting</div>
+      <div class="tl-desc">Discussion leading to RRM revisions</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Jun 24, 2025</div>
+      <div class="tl-title">Revised RRM (Rev 1)</div>
+      <div class="tl-desc">Added: concrete protective coating for all substructures, Ramp C bearing reset, MPT methods for 60%</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Sep 22, 2025</div>
+      <div class="tl-title">PMD1 — 6th Bridge Added (35A118)</div>
+      <div class="tl-desc">US 250 SB Con.-Dis., 2-span 254.0' continuous steel multi-girders — correcting an omission from the original project scope (not scope creep). Known schedule impact accepted.</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Nov 10, 2025</div>
+      <div class="tl-title">PMD1 NTP</div>
+      <div class="tl-desc">NTP for 6th bridge scope of work</div>
+    </div>
+    <div class="tl-item done">
+      <div class="tl-date">Dec 11, 2025</div>
+      <div class="tl-title">35A118 Field View Completed</div>
+      <div class="tl-desc">Field assessment of newly added 6th bridge</div>
+    </div>
+    <div class="tl-item current">
+      <div class="tl-date">Feb 9, 2026</div>
+      <div class="tl-title">Progress Report — 36% Complete</div>
+      <div class="tl-desc">PMD2 being assembled for Ramp B. Netting removal blocking survey. Utility coord not started.</div>
+    </div>
+    <div class="tl-item future">
+      <div class="tl-date">TBD</div>
+      <div class="tl-title">PMD2 — Ramp B Deck Replacement</div>
+      <div class="tl-desc">Not yet prepared — will change scope from overlay to full deck replacement</div>
+    </div>
+    <div class="tl-item future">
+      <div class="tl-date">TBD</div>
+      <div class="tl-title">Netting Removal & Survey</div>
+      <div class="tl-desc">Can't survey until netting removed — blocking design progress</div>
+    </div>
+    <div class="tl-item future">
+      <div class="tl-date">TBD</div>
+      <div class="tl-title">60% Submission</div>
+      <div class="tl-desc">Originally targeted ~Oct 2025, now date unknown</div>
+    </div>
+    <div class="tl-item future">
+      <div class="tl-date">TBD</div>
+      <div class="tl-title">PS&E (Final Plans, Specs & Estimates)</div>
+      <div class="tl-desc">Originally targeted ~Nov 2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BRIDGES ==================== -->
+<div class="section" id="bridges">
+  <h2>Bridge-by-Bridge Status</h2>
+  <p style="color:var(--text2); margin-bottom:18px; font-size:0.9rem;">Click any bridge card to expand details.</p>
+
+  <div class="bridge-card" onclick="this.classList.toggle('open')">
+    <div class="bc-header">
+      <div><span class="bc-name">35A114 — US 250 Main Span</span> &nbsp;<span class="badge badge-blue">Original</span></div>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="bc-detail">
+      <p><strong>Type:</strong> Main span over interchange</p>
+      <p><strong>Scope:</strong> Clean & paint steel, concrete repairs (substructure & superstructure), drainage repairs, deck overlay/sealant, bearing maintenance</p>
+      <p><strong>Status:</strong> RRM complete. Design in progress. No special flags.</p>
+      <p><strong>ADT:</strong> ~17,000 (triggers Level III TMP)</p>
+    </div>
+  </div>
+
+  <div class="bridge-card" onclick="this.classList.toggle('open')">
+    <div class="bc-header">
+      <div><span class="bc-name">35A122 — Ramp A</span> &nbsp;<span class="badge badge-blue">Original</span></div>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="bc-detail">
+      <p><strong>Scope:</strong> Clean & paint, concrete repairs, drainage, deck overlay/sealant</p>
+      <p><strong>Status:</strong> RRM complete. Standard rehabilitation scope. No unusual issues.</p>
+    </div>
+  </div>
+
+  <div class="bridge-card" onclick="this.classList.toggle('open')">
+    <div class="bc-header">
+      <div><span class="bc-name">35A117 — Ramp B</span> &nbsp;<span class="badge badge-red">Critical</span></div>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="bc-detail">
+      <p><strong>Scope (Original):</strong> Concrete overlay recommended in RRM</p>
+      <p><strong>Scope (Evolving):</strong> <span style="color:var(--red); font-weight:600;">Now needs full deck replacement</span></p>
+      <p><strong>Issue:</strong> PMD2 is being assembled but not yet prepared. This is the single biggest scope change risk on the project. Deck replacement is significantly more expensive and complex than overlay.</p>
+      <p><strong>Impact:</strong> Will require revised RRM, additional fee, extended schedule, and potentially different MOT approach.</p>
+      <p><strong>Action Needed:</strong> PMD2 must be completed to formalize the scope change.</p>
+    </div>
+  </div>
+
+  <div class="bridge-card" onclick="this.classList.toggle('open')">
+    <div class="bc-header">
+      <div><span class="bc-name">35A098 — Ramp C</span> &nbsp;<span class="badge badge-yellow">Watch</span></div>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="bc-detail">
+      <p><strong>Scope:</strong> Clean & paint, concrete repairs, drainage, deck overlay/sealant</p>
+      <p><strong>Added in Rev RRM:</strong> Bearing reset (item s) — bearings need to be repositioned</p>
+      <p><strong>Status:</strong> Bearing reset is a minor scope addition but worth tracking.</p>
+    </div>
+  </div>
+
+  <div class="bridge-card" onclick="this.classList.toggle('open')">
+    <div class="bc-header">
+      <div><span class="bc-name">35A121 — Ramp D</span> &nbsp;<span class="badge badge-blue">Original</span></div>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="bc-detail">
+      <p><strong>Scope:</strong> Clean & paint, concrete repairs, drainage, deck overlay/sealant</p>
+      <p><strong>Status:</strong> RRM complete. Standard rehabilitation scope. No unusual issues.</p>
+    </div>
+  </div>
+
+  <div class="bridge-card" onclick="this.classList.toggle('open')">
+    <div class="bc-header">
+      <div><span class="bc-name">35A118 — US 250 SB Con.-Dis.</span> &nbsp;<span class="badge badge-orange">Added via PMD1</span></div>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="bc-detail">
+      <p><strong>Type:</strong> 2-span, 254.0' continuous steel multi-girder bridge</p>
+      <p><strong>Added:</strong> Sep 22, 2025 via PMD1 — this bridge should have been included in the original project and was omitted in error. Not scope creep.</p>
+      <p><strong>PMD1 NTP:</strong> Nov 10, 2025</p>
+      <p><strong>Field View:</strong> Completed Dec 11, 2025</p>
+      <p><strong>Additional Plan Sheets:</strong> 1 general plan, 3 substructure, 2 deck, 2 framing, 1 misc details, 2 MOT</p>
+      <p><strong>Issue:</strong> <span style="color:var(--red); font-weight:600;">PMD1 fee proposal shows all zeros — fee not yet approved.</span> Work is proceeding without a formalized cost agreement.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PITFALLS ==================== -->
+<div class="section" id="pitfalls">
+  <h2>Pitfalls & Red Flags</h2>
+  <p style="color:var(--text2); margin-bottom:18px; font-size:0.9rem;">Click any item to expand details. Sorted by severity.</p>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;Ramp B Deck Replacement — PMD2 Not Prepared</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      The original RRM recommended a concrete overlay for Ramp B (35A117). The Feb 2026 progress report states PMD2 is "being assembled" for a full deck replacement — a major scope escalation. This PMD has not yet been prepared, meaning the scope change is not formalized, no additional fee has been negotiated, and the schedule impact is unknown. Deck replacement is significantly more complex and costly than overlay. <strong>This is the single biggest risk item on the project.</strong>
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;60% Submission Date = TBD</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      The original CPM schedule targeted 60% plans around Oct 2025 and PS&E around Nov 2025. As of Feb 2026, the 60% submission date is listed as "TBD." The project is 10 months past NTP with no scheduled date for the next major deliverable. The design schedule needs updating per the progress report.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-red">Critical</span> &nbsp;PMD1 Fee = $0 (Zeroed)</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      The PMD1 added a 6th bridge (35A118) with significant additional scope: field view, RRM update, 11+ additional plan sheets, TMP updates. The fee proposal for this work shows all hours and costs zeroed out. Markosky is effectively doing this work without an approved fee — this creates cost risk and potential disputes.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-red">High</span> &nbsp;Netting Removal Blocking Survey Access</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      Existing safety netting on the bridges is preventing survey crews from accessing the structures. Survey data is needed for design. Until the netting is removed, design work cannot progress on certain elements. This is an external dependency that the design team cannot control.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-orange">High</span> &nbsp;Utility Coordination Not Started</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      The progress report notes utility coordination has not started — 10 months into the project. Utility conflicts discovered late in design are one of the most common causes of construction delays and change orders. The bridges carry or cross utilities that need to be identified and protected or relocated.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-orange">Medium</span> &nbsp;ODOT Coordination Needed for Detour Routes</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      The interchange sits at the WV-OH state line. Detour routes during construction may route traffic through Ohio, requiring ODOT coordination. This interstate coordination adds complexity and time to the MOT design process and has not been finalized.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-yellow">Medium</span> &nbsp;Fee Was Cut $46K Before Work Started</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      The fee was reduced from $508,102 to $462,144 (a 9% cut, 426 hours removed) before NTP, primarily in Structure Rehab hours. With scope increasing (6th bridge, Ramp B deck replacement), the reduced fee base may not be adequate. Watch for supplemental fee requests.
+    </div>
+  </div>
+
+  <div class="pitfall" onclick="this.classList.toggle('open')">
+    <div class="pf-head">
+      <span class="pf-title"><span class="badge badge-yellow">Medium</span> &nbsp;NTP Slipped 2 Months at the Start</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="pf-body">
+      Original proposal assumed NTP of Feb 3, 2025. Actual NTP was Apr 4, 2025 — a 2-month slip before work even began. This suggests the project had contracting/approval delays from the start, which may recur with PMD2 approvals.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== UNCLEAR ==================== -->
+<div class="section" id="unclear">
+  <h2>Unclear / Ambiguous Items</h2>
+
+  <div class="unclear">
+    <div class="unc-title">What is the actual target date for 60% submission?</div>
+    <div class="unc-body">The progress report simply says "TBD." There's no updated CPM schedule in the documents. Ask Markosky for a revised schedule showing the critical path to 60% and PS&E.</div>
+  </div>
+
+  <div class="unclear">
+    <div class="unc-title">What is the cost impact of PMD1 (6th bridge)?</div>
+    <div class="unc-body">The fee proposal for PMD1 is zeroed out — there's no approved dollar amount for the additional work. It's unclear if Markosky is absorbing this cost, if a fee is being negotiated, or if this is an oversight.</div>
+  </div>
+
+  <div class="unclear">
+    <div class="unc-title">What is the scope and cost of PMD2 (Ramp B deck replacement)?</div>
+    <div class="unc-body">PMD2 is described as "being assembled" but no details are available. The jump from overlay to deck replacement is a significant cost and schedule escalation that hasn't been quantified.</div>
+  </div>
+
+  <div class="unclear">
+    <div class="unc-title">Who is responsible for netting removal, and when will it happen?</div>
+    <div class="unc-body">The netting is blocking survey access, but the documents don't specify who owns this task, what the cost is, or when it's scheduled. This is a critical-path blocker.</div>
+  </div>
+
+  <div class="unclear">
+    <div class="unc-title">Has ODOT been contacted about detour routes?</div>
+    <div class="unc-body">The need for ODOT coordination on Ohio-side detours is mentioned but there's no indication it has started. Cross-state coordination can have long lead times.</div>
+  </div>
+</div>
+
+<!-- ==================== POSITIVES ==================== -->
+<div class="section" id="positives">
+  <h2>What's Going Well</h2>
+
+  <div class="positive">
+    <div class="pos-title">Field Work Went Smoothly</div>
+    <div class="pos-body">The May 2025 field inspection found "no major concerns beyond originally anticipated scope." The field crew (Dietrich & Bacho) completed assessment of all 5 original bridges in a single visit. The 6th bridge field view was also completed on schedule (Dec 11, 2025).</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">RRM Was Delivered On Time</div>
+    <div class="pos-body">The original RRM was submitted Jun 4, 2025 — within the NTP + 60 days target. The revised RRM (Jun 24) was turned around quickly after the Jun 18 progress meeting, showing good consultant responsiveness.</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">Scope Is Well-Documented</div>
+    <div class="pos-body">The project narrative, RRMs, and PMD provide thorough documentation of scope. Repair recommendations are itemized per bridge with specific repair methods. The document trail is clear and traceable.</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">No Surprises on Original 5 Bridges</div>
+    <div class="pos-body">Field conditions on the original 5 bridges matched expectations from the scope of work meeting. The only scope additions were minor: concrete protective coating for substructures and Ramp C bearing reset.</div>
+  </div>
+
+  <div class="positive">
+    <div class="pos-title">PMD1 Process Worked Correctly</div>
+    <div class="pos-body">The addition of the 6th bridge (35A118) followed proper WVDOH process: PMD prepared → approved → NTP issued → field view completed. The documentation is thorough with full narrative and additional plan sheet breakdown.</div>
+  </div>
+</div>
+
+<!-- ==================== FEES ==================== -->
+<div class="section" id="fees">
+  <h2>Fee & Budget Details</h2>
+
+  <h3>Fee Evolution</h3>
+  <table>
+    <thead>
+      <tr><th>Version</th><th>Date</th><th>Total Fee</th><th>Hours</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Original Proposal</td><td>Jan 9, 2025</td>
+        <td class="money strikethrough">$508,102</td><td class="strikethrough">3,526</td>
+        <td>Full 54-page proposal with CPM schedule</td>
+      </tr>
+      <tr>
+        <td>Revised Proposal</td><td>Feb 14, 2025</td>
+        <td class="money" style="color:var(--green)">$462,144</td><td>3,100</td>
+        <td>Cut $46K / 426 hrs — mainly Structure Rehab</td>
+      </tr>
+      <tr>
+        <td>PMD1 Fee (6th Bridge)</td><td>Sep 22, 2025</td>
+        <td class="money" style="color:var(--red)">$0</td><td>0</td>
+        <td style="color:var(--red)">All values zeroed — not approved</td>
+      </tr>
+      <tr>
+        <td>PMD2 Fee (Ramp B)</td><td>TBD</td>
+        <td class="money" style="color:var(--text2)">TBD</td><td>TBD</td>
+        <td>Not yet prepared</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Contract Parameters</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label" style="color:var(--text2)">Contract Type</div>
+      <div class="card-value" style="font-size:1rem">Cost-Plus Fixed Fee</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--text2)">Overhead Rate</div>
+      <div class="card-value">156.17%</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--text2)">Profit</div>
+      <div class="card-value">13%</div>
+    </div>
+    <div class="card">
+      <div class="card-label" style="color:var(--text2)">Expense Factor</div>
+      <div class="card-value">2.692</div>
+    </div>
+  </div>
+
+  <h3>Key Labor Rates</h3>
+  <table>
+    <thead><tr><th>Role</th><th>Rate ($/hr)</th></tr></thead>
+    <tbody>
+      <tr><td>Senior Project Manager</td><td class="money">$73.15</td></tr>
+      <tr><td>Project Manager</td><td class="money">$72.00</td></tr>
+      <tr><td>Senior Engineer</td><td class="money">$71.80</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== PEOPLE ==================== -->
+<div class="section" id="people">
+  <h2>Key People</h2>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--accent)">BD</div>
+    <div>
+      <div class="person-name">Bryan Dietrich, PE, CBSI</div>
+      <div class="person-role">Field Inspector — Markosky Engineering. Led the May 12, 2025 field assessment. Certified Bridge Safety Inspector.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--accent2)">DB</div>
+    <div>
+      <div class="person-name">Dominic Bacho, EIT</div>
+      <div class="person-role">Field Inspector — Markosky Engineering. Assisted with May 12, 2025 field assessment.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--green)">JW</div>
+    <div>
+      <div class="person-name">Jason (Last Name TBD)</div>
+      <div class="person-role">PMD signatory — likely WVDOH project authority. Signed PMD1 approval.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--orange)">MK</div>
+    <div>
+      <div class="person-name">Markosky Engineering Group, Inc.</div>
+      <div class="person-role">Prime consultant. Headquartered in Uniontown, PA. Handling all design, RRMs, TMP, and plan development.</div>
+    </div>
+  </div>
+
+  <div class="person">
+    <div class="person-avatar" style="background:var(--surface2)">D6</div>
+    <div>
+      <div class="person-name">WVDOH District 6</div>
+      <div class="person-role">Owner/client district office. Oversees the project from WVDOH side.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== BOTTOM LINE ==================== -->
+<div class="section" id="bottomline">
+  <h2>Bottom Line</h2>
+
+  <div class="bottom-line" style="margin-top:0">
+    <h3>The Big Picture</h3>
+    <p style="margin-bottom:16px; font-size:0.95rem; line-height:1.8;">
+      This is a bridge rehabilitation project that started well — good field work, no surprises on original scope, timely RRM — but is now <strong>significantly behind schedule</strong> with <strong>expanded scope</strong> and <strong>unresolved blockers</strong>. Note: the 6th bridge (PMD1) was added to correct an omission, not scope creep — the schedule impact was anticipated.
+    </p>
+    <ul>
+      <li><strong>Schedule:</strong> 36% complete after 10 months. Originally expected PS&E by Nov 2025 — now 60% plans don't even have a target date.</li>
+      <li><strong>Scope growth:</strong> Started as 5-bridge rehab. Now 6 bridges — the 6th (35A118) was a bridge that should have been included originally and was added via PMD1 to correct the omission. Ramp B is also potentially jumping from overlay to full deck replacement (PMD2).</li>
+      <li><strong>Money:</strong> Fee was already cut 9% before starting. PMD1 work has no approved fee. PMD2 cost is unknown.</li>
+      <li><strong>Blockers:</strong> Netting removal → survey → design. Until netting comes down, design can't advance on certain elements.</li>
+      <li><strong>Gaps:</strong> Utility coordination not started. ODOT detour coordination status unknown. Updated CPM schedule needed.</li>
+    </ul>
+  </div>
+
+  <div style="margin-top:24px; background:var(--surface); border-radius:12px; padding:24px; border-left:4px solid var(--accent);">
+    <h3 style="color:var(--accent); margin-bottom:12px;">Questions to Ask in the Meeting</h3>
+    <ol style="padding-left:20px; line-height:2.2; font-size:0.95rem;">
+      <li>When will Markosky deliver an <strong>updated CPM schedule</strong> with a firm 60% submission date?</li>
+      <li>What is the <strong>timeline and responsibility</strong> for netting removal?</li>
+      <li>When will the <strong>PMD1 fee</strong> be finalized? Is Markosky working at risk?</li>
+      <li>What is the <strong>preliminary cost estimate</strong> for PMD2 (Ramp B deck replacement)?</li>
+      <li>When will <strong>utility coordination</strong> begin, and who is the point of contact?</li>
+      <li>Has anyone <strong>contacted ODOT</strong> about detour routes through Ohio?</li>
+      <li>Is the <strong>$462K fee</strong> still realistic given PMD1 + potential PMD2 scope additions?</li>
+    </ol>
+  </div>
+
+  <div style="margin-top:24px; background:rgba(239,68,68,0.08); border-radius:12px; padding:24px; border-left:4px solid var(--red);">
+    <h3 style="color:var(--red); margin-bottom:12px;">If You Only Remember 3 Things</h3>
+    <ol style="padding-left:20px; line-height:2.2; font-size:1rem; font-weight:500;">
+      <li>Project is <strong>behind schedule</strong> — 60% plans date is TBD, ~4+ months late</li>
+      <li><strong>Ramp B deck replacement</strong> (PMD2) is the biggest risk — not yet formalized</li>
+      <li><strong>PMD1 fee is $0</strong> — 6th bridge work has no approved cost</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+// Tab navigation
+document.querySelectorAll('.nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  const tabs = Array.from(document.querySelectorAll('.nav button'));
+  const activeIdx = tabs.findIndex(t => t.classList.contains('active'));
+  if (e.key === 'ArrowRight' && activeIdx < tabs.length - 1) {
+    tabs[activeIdx + 1].click();
+  } else if (e.key === 'ArrowLeft' && activeIdx > 0) {
+    tabs[activeIdx - 1].click();
+  }
+});
+</script>
+
+</body>
+</html>
